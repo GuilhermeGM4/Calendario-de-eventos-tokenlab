@@ -1,14 +1,9 @@
 function adicionar(email_usuario){
-    console.log(email_usuario);
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "./eventos.json");
-    xhr.onload = function(){
-        console.log(xhr.responseText);
-        console.log(email_usuario);
-        var eventos = JSON.parse(xhr.responseText);
+    var URL = "https://guilhermegm4.github.io/Calendario-de-eventos-tokenlab"; //url do site
+
+    $.getJSON(URL+"/eventos.json", function(eventos){
         console.log(eventos);
-        document.getElementById("testes").innerHTML = eventos[0];
-        eventos = eventos.email_usuario;
+        eventos = eventos[email_usuario];
         console.log(eventos);
 
         //input do usuário
@@ -29,12 +24,11 @@ function adicionar(email_usuario){
         tabela = `${tabela}<tr><td>${data_inicio}</td> <td>${hora_inicio}</td> <td>${data_fim}</td> <td>${hora_fim}</td> <td>${descricao}</td></tr>`;
 
         for (const elemento of eventos){
-        //for (let i = 0; i < eventos.length; i++){
+            console.log(elemento);
             if (elemento.data_inicio === data_inicio && elemento.data_fim === data_fim && elemento.hora_inicio === hora_inicio && elemento.hora_fim === hora_fim)
                 return document.getElementById("mensagem").innerHTML = '<div class="alert alert-danger alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong> O evento já existe, modifique ou remova o evento já existente.</div>';
         }
 
-        document.getElementById("calendario").innerHTML = tabela;
         eventos[eventos.length] = {
             "data_inicio" : data_inicio, 
             "hora_inicio" : hora_inicio, 
@@ -43,10 +37,41 @@ function adicionar(email_usuario){
             "descricao" : descricao, 
             "id" : eventos.length
         };
+        $.ajax({
+            url : URL+"/eventos.json",
+            type : "POST",
+            data : {
+                data_inicio : data_inicio, 
+                hora_inicio : hora_inicio, 
+                data_fim : data_fim, 
+                hora_fim : hora_fim, 
+                descricao : descricao, 
+                id : eventos.length
+            },
+            success : function (msg){
+                if (msg.status == "erro"){
+                    alert(msg.msg);
+                    document.getElementById("mensagem").innerHTML = `<div class="alert alert-danger alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong>${msg.msg}</div>`;
+                }
+                else {
+                    alert("Sucesso");
 
-        document.getElementById("mensagem").innerHTML = '<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Sucesso!</strong> O seu novo evento foi adicionado!</div>';
-    };
-    xhr.send();
+                    document.getElementById("calendario").innerHTML = tabela;
+                    document.getElementById("mensagem").innerHTML = '<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Sucesso!</strong> O seu novo evento foi adicionado!</div>';
+                }
+            }
+        });
+    });
+
+    //old
+    //var xhr = new XMLHttpRequest();
+    //xhr.open("GET", URL+"/eventos.json");
+    //xhr.onload = function(){
+        //pega json e coloca em variavel
+        //var eventos = JSON.parse(xhr.responseText);
+        
+    //};
+    //xhr.send();
 
     
 }
