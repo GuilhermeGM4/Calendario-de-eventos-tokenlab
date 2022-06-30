@@ -1,0 +1,17 @@
+[
+    {
+        "email" : "GuilhermeMancuso@proton.me",
+        "nome" : "Guilherme Garcia Mancuso",
+        "senha" : "admin"
+    },
+    {
+        "email" : "teste@123.com",
+        "nome" : "teste",
+        "senha" : "123"
+    },
+    {
+        "email" : "abc@123.com",
+        "nome" : "abc",
+        "senha" : "456"
+    }
+]

@@ -11,6 +11,7 @@
     </head>
     <body>
         <h1 class="d-flex justify-content-center">Login</h1>
+        <div class="container justify-content-center w-25" id="mensagem"></div>
         <div class="container justify-content-center w-25">
             <form method="post" action="login.php" class="form">
                 <div class="mb-3">
@@ -21,10 +22,24 @@
                     <label for="senha" class="form-label">Senha</label>
                     <input type="password" id="senha" class="form-control" placeholder="Senha" name="senha" id="logar">
                 </div>
-                <input type="button" class="btn btn-primary" value="Entrar">
+                <input type="button" class="btn btn-primary" value="Entrar" id="login">
             </form>
         </div>
     </body>
 
     <script src="bs5.2.0/js/bootstrap.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        $("#login").click(function(){
+            var input_email = document.getElementById("email").value;
+            var input_senha = document.getElementById("senha").value;
+
+            $.getJSON("./login.json", function(pessoa){
+                for(i of pessoa){
+                    if ((i.email === input_email) && (i.senha === input_senha)) window.location.replace("./calendario.html");
+                    else document.getElementById("mensagem").innerHTML = '<div class="alert alert-danger alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong> Email e/ou senha errados.</div>';
+                }
+            });
+        });
+    </script>
 </html>

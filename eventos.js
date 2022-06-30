@@ -2,9 +2,9 @@ function adicionar(email_usuario){
     var URL = "https://guilhermegm4.github.io/Calendario-de-eventos-tokenlab"; //url do site
 
     $.getJSON(URL+"/eventos.json", function(eventos){
-        console.log(eventos);
+        if (eventos[email_usuario] === undefined) eventos[email_usuario] = [];
+
         eventos = eventos[email_usuario];
-        console.log(eventos);
 
         //input do usuário
         var data_inicio = document.getElementById("d_inicio").value;
@@ -21,7 +21,7 @@ function adicionar(email_usuario){
         var tabela = document.getElementById("calendario").innerHTML;
 
         //cria a nova linha
-        tabela = `${tabela}<tr><td>${data_inicio}</td> <td>${hora_inicio}</td> <td>${data_fim}</td> <td>${hora_fim}</td> <td>${descricao}</td></tr>`;
+        tabela = `${tabela}<tr id="${eventos.length}"><td>${data_inicio}</td> <td>${hora_inicio}</td> <td>${data_fim}</td> <td>${hora_fim}</td> <td>${descricao}</td> <td><button type="button" class="btn btn-primary" onclick="modificar('${i.id}, email')">Modificar</button></td></tr>`;
 
         for (const elemento of eventos){
             console.log(elemento);
@@ -29,16 +29,9 @@ function adicionar(email_usuario){
                 return document.getElementById("mensagem").innerHTML = '<div class="alert alert-danger alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong> O evento já existe, modifique ou remova o evento já existente.</div>';
         }
 
-        eventos[eventos.length] = {
-            "data_inicio" : data_inicio, 
-            "hora_inicio" : hora_inicio, 
-            "data_fim" : data_fim, 
-            "hora_fim" : hora_fim, 
-            "descricao" : descricao, 
-            "id" : eventos.length
-        };
+        //modifica json (erro)
         $.ajax({
-            url : URL+"/eventos.json",
+            url : "./eventos.json",
             type : "POST",
             data : {
                 data_inicio : data_inicio, 
@@ -55,12 +48,12 @@ function adicionar(email_usuario){
                 }
                 else {
                     alert("Sucesso");
-
-                    document.getElementById("calendario").innerHTML = tabela;
-                    document.getElementById("mensagem").innerHTML = '<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Sucesso!</strong> O seu novo evento foi adicionado!</div>';
                 }
             }
         });
+        //coloca nova linha na tabela
+        document.getElementById("calendario").innerHTML = tabela;
+        document.getElementById("mensagem").innerHTML = '<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Sucesso!</strong> O seu novo evento foi adicionado!</div>';
     });
 
     //old
@@ -76,18 +69,25 @@ function adicionar(email_usuario){
     
 }
 
-function modificar(id_elemento, email){
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "eventos.json");
-    xhr.onload = function(){
-        var eventos = JSON.parse(xhr.responseText);
-        eventos = eventos.email;
+function modificar(id_elemento, email_usuario){
+    $.getJSON("./eventos.json", function(eventos){
+        eventos = eventos[email_usuario];
         //input do usuário
-        const inicio = document.getElementById("inicio").value;
-        const fim = document.getElementById("fim").value;
+        var data_inicio = document.getElementById("d_inicio").value;
+        var hora_inicio = document.getElementById("h_inicio").value;
+        var data_fim = document.getElementById("d_fim").value;
+        var hora_fim = document.getElementById("h_fim").value;
         var descricao = document.getElementById("descricao").value;
+        //var id_elemento = document.getElementsByTagName("id_evento").id;
 
-        eventos[id_elemento] = {"inicio" : inicio, "fim" : fim, "descricao" : descricao, "id" : id_elemento};
-    };
-    xhr.send();
+        eventos[id_elemento] = {
+            "data_inicio" : data_inicio,
+            "hora_inicio" : hora_inicio,
+            "data_fim" : data_fim,
+            "hora_fim" : hora_fim,
+            "descricao" : descricao,
+            "id" : id_elemento
+        };
+        console.log(eventos[id_elemento]);
+    });
 }

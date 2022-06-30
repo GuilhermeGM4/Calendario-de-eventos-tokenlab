@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        </br>
+        <br>
 
         <div class="justify-content-center container">
             <table class="table table-responsive table-bordered table-striped" id="calendario">
@@ -74,7 +74,7 @@
                         <th>Data Término</th>
                         <th>Horario Término</th>
                         <th class="mw-50">Descrição</th>
-                        <!--<th>Ações</th>-->
+                        <th>Ações</th>
                     </tr>
                 </thead>
 
@@ -87,6 +87,17 @@
     <script src="./bs5.2.0/js/bootstrap.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script>
+        $(document).ready(function(){
+            $.getJSON("./eventos.json", function(eventos){
+                eventos = eventos.email;
+                var linha;
+                for(i of eventos){
+                    console.log(i);
+                    linha = `<tr id="${i.id}"><td>${i.data_inicio}</td> <td>${i.hora_inicio}</td> <td>${i.data_fim}</td> <td>${i.hora_fim}</td> <td>${i.descricao}</td> <td><button type="button" class="btn btn-primary" onclick="modificar('${i.id}, email')">Modificar</button></td></tr>`;
+                    document.getElementById("table_body").innerHTML = linha;
+                }
+            });
+        });
     </script>
     <script src="eventos.js"></script>
 </html>
