@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Calendário Tokenlab</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Tokenlab, Calendário">
+        <meta name="description" content="Calendário de eventos.">
+        <meta name="author" content="Guilherme Garcia Mancuso">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="bs5.2.0/css/bootstrap.css">
+    </head>
+
+    <body>
+        <h1 class="d-flex justify-content-center">Calendário</h1>
+        
+        <button type="button" class="btn btn-primary align-middle" data-bs-toggle="modal" data-bs-target="#addEvento">Novo evento</button>
+        <!--O novo evento é adicionado na mesma pagina usando uma modal-->
+        <div class="modal" id="addEvento">
+            <div class="modal-dialog modal-content">
+                <!--Header/Titulo da modal-->
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar evento</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!--Conteudo da modal contendo form de cadastro-->
+                <div class="modal-body">
+                    <div id="mensagem"> </div>
+                    <!--form de cadastro-->
+                    <form action="novo_evento.js">
+                        <div class="mb-3 mt-3">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="d_inicio" class="form-label">Dia Inicio</label>
+                                    <input type="date" class="form-control" id="d_inicio" name="data_inicio">
+                                </div>
+                                <div class="col">
+                                    <label for="h_inicio" class="form_label">Horario de inicio</label>
+                                    <input type="time" class="form-control" id="h_inicio">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="d_fim" class="form-label">Data de término</label>
+                                    <input type="date" class="form-control" id="d_fim" name="data_fim">
+                                </div>
+                                <div class="col">
+                                    <label for="h_fim" class="form-label">Horario término</label>
+                                    <input type="time" class="form-control" id="h_fim" name="hora_fim">
+                                </div>
+                            </div>
+                
+                            <label for="descricao" class="form-label">Descricao</label>
+                            <input type="text" class="form-control" id="descricao" placeholder="Descricão do evento (opicional)">
+                        </div>
+                        
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class=" btn btn-primary" id="teste" onclick="adicionar('email')">Adicionar</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        </br>
+
+        <div class="justify-content-center container">
+            <table class="table table-responsive table-bordered table-striped" id="calendario">
+                <thead class="table-success">
+                    <tr>
+                        <th>Data Inicio</th>
+                        <th>Horário inicio</th>
+                        <th>Data Término</th>
+                        <th>Horario Término</th>
+                        <th class="mw-50">Descrição</th>
+                        <!--<th>Ações</th>-->
+                    </tr>
+                </thead>
+
+                <tbody class="table-hover table-secondary" id="table_body">
+                </tbody>
+            </table>
+        </div>
+        <div id="testes"></div>
+    </body>
+    <script src="./bs5.2.0/js/bootstrap.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        var eventos;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "eventos.json", false);
+        xhr.onload = function(){
+            eventos = xhr.responseText;
+            document.getElementById("testes").innerHTML = eventos;
+        };
+        console.log(eventos);
+    </script>
+    <script src="eventos.js"></script>
+</html>
