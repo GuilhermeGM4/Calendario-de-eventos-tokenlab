@@ -16,6 +16,8 @@ function adicionar(email_usuario){
         //verifica se algum campo obrigatorio esta em branco e da notificaçao de erro caso esteja
         if (data_inicio === "" || hora_inicio === "" || data_fim === "" || hora_fim === "") 
             return document.getElementById("mensagem").innerHTML = '<div class="alert alert-danger alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong> Você deve preencher todos os dados de inicio e fim.</div>';
+        else if((data_inicio > data_fim) || (data_inicio >= data_fim && hora_inicio >= hora_fim))
+            return document.getElementById("mensagem").innerHTML = '<div class="alert alert-danger alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong> O fim vem depois do inicio.</div>';
         
         //conteudo do calendario que esta renderizado
         var tabela = document.getElementById("calendario").innerHTML;
@@ -26,7 +28,7 @@ function adicionar(email_usuario){
         for (const elemento of eventos){
             console.log(elemento);
             if (elemento.data_inicio === data_inicio && elemento.data_fim === data_fim && elemento.hora_inicio === hora_inicio && elemento.hora_fim === hora_fim)
-                return document.getElementById("mensagem").innerHTML = '<div class="alert alert-danger alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong> O evento já existe, modifique ou remova o evento já existente.</div>';
+                return document.getElementById("mensagem").innerHTML = '<div class="alert alert-danger alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Erro!</strong> O evento já existe, modifique ou remova o evento já existente.</div>';
         }
 
         //modifica json (erro)
